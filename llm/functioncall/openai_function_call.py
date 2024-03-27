@@ -46,10 +46,12 @@ class OpenaiClient:
             - 如果查询是问候语，或者既不是问题也不是指令，则调用 functions.finish
             - 如果函数的输出是空的，请尝试使用不同的参数再次调用函数，或者尝试调用不同的函数
             - 始终调用函数。不要直接回答问题
+            - user:后面的内容才是用户的输入，前面的background是一些背景介绍
             """ 
             self.messages.append({"role": "system", "content": prompt})
             chat_response = self.chat_completion_request(self.messages, self.tools, 'auto')
             assistant_message = chat_response.choices[0].message
+            self.messages.pop()
             self.messages.append(assistant_message)
             tool_calls = assistant_message.tool_calls
             for tool_call in tool_calls:
@@ -62,13 +64,14 @@ class OpenaiClient:
                 logger.info(f"Calling function {function_name}({function_args_str})")
                 function_call_response = eval(f"fl.{function_name}({function_args_str})")#TODO 展示
                 if function_name == "finish":
-                    if len(function_call_response) == 0:
-                        function_call_response = "The current question does not require a call to an external function, so please think about it and answer it directly."
-                    else:
-                        response = []
-                        for i in function_call_response:
-                            response.append(self.messages[i]["content"])
-                        function_call_response = response
+                    # if len(function_call_response) == 0:
+                    #     function_call_response = "The current question does not require a call to an external function, so please think about it and answer it directly."
+                    # else:
+                    #     response = []
+                    #     for i in function_call_response:
+                    #         print(self.messages[i])
+                    #         response.append(self.messages[i])
+                    #     function_call_response = response
                     self.messages.append(
                     {
                         "tool_call_id": tool_call.id,

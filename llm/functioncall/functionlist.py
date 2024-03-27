@@ -28,7 +28,7 @@ def read_any_file(file_path):
             "type": "array",
             "items": {
                 "type": "integer",
-                "description": "The indices of the paths to answer with respect to. Can be empty if the answer is not related to a specific path."
+                "description": "The index of the path to be answered. Can be null if the answer is not related to a specific path. For example:[1,3] or []."
             }
         }
     }
