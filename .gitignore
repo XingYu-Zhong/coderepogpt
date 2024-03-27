@@ -156,3 +156,7 @@ venv.bak/
 .DS_Store
 
 logfiles
+
+output
+
+.env
