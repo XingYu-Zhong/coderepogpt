@@ -32,4 +32,26 @@ CodeRepoGPT是一个基于LLM的代码项目咨询平台。它能够根据用户
 ```
 pip install -r requirements.txt
 python main.py
-``
+```
+
+## 注册函数工具
+在这个functionlist.py中，你可以注册你想要调用的函数。
+```
+├── llm
+│   ├── functionlist.py
+```
+我们通过装饰器@functioncall()来注册函数。
+```python
+@functioncall(
+    description="Can read any file.",
+    param_descriptions={
+        "file_path": {
+            "description": "Path to the file to be read.",
+            "type": "string"
+        }
+    }
+)
+def read_any_file(file_path):
+    return read_file(file_path)
+```
+需要添加函数的描述，以及参数的描述，特别要注意的是type，必须按照openai的functioncall里的type来写
