@@ -14,6 +14,8 @@ def functioncall(description: str, param_descriptions: Dict[str, Dict[str, Any]]
             "required": [],
         }
         for name, param in params.items():
+            if name == "self":
+                continue
             param_info = param_descriptions.get(name, {})
             param_type = param_info.get("type", "string")
             param_desc = param_info.get("description", "")

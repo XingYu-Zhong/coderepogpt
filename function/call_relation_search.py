@@ -1,4 +1,4 @@
-from function.codebase.build_index import GraphIndex
+from codebase.build_index import GraphIndex
 from function.utils import *
 
 class CallRelationSearch:

@@ -8,13 +8,14 @@ import llm.functioncall.functionlist as fl
 from llm.functioncall.decorator import *
 from logger.logging_config import logger
 class OpenaiClient:
-    def __init__(self):
+    def __init__(self,project_path):
         load_dotenv()
         openai_api_key = os.getenv("openai_api_key")
         self.tools_model = "gpt-4-turbo-preview"
         self.client = OpenAI(api_key = openai_api_key)
         self.tools = registered_functions
         self.messages = []#TODO save
+        self.pa = fl.ProjectAnalyzer(project_path)
 
     @retry(wait=wait_random_exponential(multiplier=1, max=40), stop=stop_after_attempt(3))
     def chat_completion_request(self,messages, tools=None, tool_choice=None,model = None):
@@ -61,8 +62,8 @@ class OpenaiClient:
                     f"{k}={repr(v) if isinstance(v, str) else v if not isinstance(v, list) else '[' + ', '.join(map(repr, v)) + ']'}"
                     for k, v in function_args.items()
                 ])
-                logger.info(f"Calling function {function_name}({function_args_str})")
-                function_call_response = eval(f"fl.{function_name}({function_args_str})")#TODO 展示
+                logger.info(f"Calling function self.pa.{function_name}({function_args_str})")
+                function_call_response = eval(f"self.pa.{function_name}({function_args_str})")#TODO 展示
                 if function_name == "finish":
                     # if len(function_call_response) == 0:
                     #     function_call_response = "The current question does not require a call to an external function, so please think about it and answer it directly."

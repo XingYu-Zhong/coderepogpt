@@ -10,3 +10,6 @@ langchain
 openai
 transformers
 scipy
+
+
+llama_index

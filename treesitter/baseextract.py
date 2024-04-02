@@ -11,7 +11,7 @@ class BaseExtract:
             extension = "dylib"
         else:  # Assume Linux if not Windows or macOS
             extension = "so"
-        language_path = os.path.join(os.path.dirname(__file__), "../build", f"tree-sitter-{language}.{extension}")
+        language_path = os.path.join(os.path.dirname(__file__), "../codebase/build", f"tree-sitter-{language}.{extension}")
         self.treesitter = Language(language_path, language)
 
     def parse_file_with_treesitter(self, context:str):
