@@ -51,7 +51,9 @@ class OpenaiClient:
             """ 
             self.messages.append({"role": "system", "content": prompt})
             chat_response = self.chat_completion_request(self.messages, self.tools, 'auto')
+            
             assistant_message = chat_response.choices[0].message
+            print(assistant_message)
             self.messages.pop()
             self.messages.append(assistant_message)
             tool_calls = assistant_message.tool_calls
