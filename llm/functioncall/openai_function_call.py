@@ -11,8 +11,8 @@ class OpenaiClient:
     def __init__(self,project_path,proxy=None):
         load_dotenv()
         if proxy:
-            os.environ["HTTP_PROXY"] = proxy
-            os.environ["HTTPS_PROXY"] = proxy
+            os.environ["HTTP_PROXY"] = f'http://127.0.0.1:{proxy}'
+            os.environ["HTTPS_PROXY"] = f'http://127.0.0.1:{proxy}'
         openai_api_key = os.getenv("openai_api_key")
         self.tools_model = "gpt-4o"
         self.client = OpenAI(api_key = openai_api_key)
