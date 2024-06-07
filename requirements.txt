@@ -13,5 +13,7 @@ scipy
 
 
 llama_index
-
+gitpython
 chainlit
+fastapi
+uvicorn

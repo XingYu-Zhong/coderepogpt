@@ -8,10 +8,13 @@ import llm.functioncall.functionlist as fl
 from llm.functioncall.decorator import *
 from logger.logging_config import logger
 class OpenaiClient:
-    def __init__(self,project_path):
+    def __init__(self,project_path,proxy=None):
         load_dotenv()
+        if proxy:
+            os.environ["HTTP_PROXY"] = proxy
+            os.environ["HTTPS_PROXY"] = proxy
         openai_api_key = os.getenv("openai_api_key")
-        self.tools_model = "gpt-4-turbo-preview"
+        self.tools_model = "gpt-4o"
         self.client = OpenAI(api_key = openai_api_key)
         self.tools = registered_functions
         self.messages = []#TODO save

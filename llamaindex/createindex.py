@@ -31,16 +31,17 @@ class IndexStore:
         document_list = []
         for root, dirs, files in os.walk(self.file_dir):
             for filename in files:
-                full_path = os.path.join(root, filename)  # 构建完整路径
-                normalized_path = os.path.normpath(full_path)  # 标准化路径
-                extract = PyExtract()
-                result_list = extract.splitter_function(normalized_path)  # 使用标准化的完整路径
-                for result in result_list:
-                    document = Document(
-                        text=read_file(file_path=result['source_path'],begin_byte=result['begin_byte'],end_byte=result['end_byte']),
-                        metadata={"filepath": result['source_path'], "name":result['name']},
-                    )
-                    document_list.append(document)
+                if filename.endswith('.py'):  # 只处理 .py 文件
+                    full_path = os.path.join(root, filename)  # 构建完整路径
+                    normalized_path = os.path.normpath(full_path)  # 标准化路径
+                    extract = PyExtract()
+                    result_list = extract.splitter_function(normalized_path)  # 使用标准化的完整路径
+                    for result in result_list:
+                        document = Document(
+                            text=read_file(file_path=result['source_path'], begin_byte=result['begin_byte'], end_byte=result['end_byte']),
+                            metadata={"filepath": result['source_path'], "name": result['name']},
+                        )
+                        document_list.append(document)
 
         return document_list
     

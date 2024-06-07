@@ -1,7 +1,0 @@
-tree-sitter==0.20.4
-networkx==2.5
-matplotlib
-langchain
-openai
-transformers
-scipy
