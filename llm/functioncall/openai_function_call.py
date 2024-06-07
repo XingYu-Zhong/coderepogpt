@@ -13,9 +13,9 @@ class OpenaiClient:
         if proxy:
             os.environ["HTTP_PROXY"] = f'http://127.0.0.1:{proxy}'
             os.environ["HTTPS_PROXY"] = f'http://127.0.0.1:{proxy}'
-        openai_api_key = os.getenv("openai_api_key")
-        self.tools_model = "gpt-4o"
-        self.client = OpenAI(api_key = openai_api_key)
+        glm_api_key = os.getenv("glm_api_key")
+        self.tools_model = "glm-4"
+        self.client = OpenAI(api_key = glm_api_key,base_url="https://open.bigmodel.cn/api/paas/v4/")
         self.tools = registered_functions
         self.messages = []#TODO save
         self.pa = fl.ProjectAnalyzer(project_path)

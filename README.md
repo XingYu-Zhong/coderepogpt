@@ -5,7 +5,7 @@
 CodeRepoGPT是一个基于LLM的代码项目咨询平台。它能够根据用户输入的内容，自动索引到相关代码片段，文件等收集足够多信息后回答用户问题。
 
 ## 技术规划
-主要通过function call来进行交互，通过gpt-4-turbo-preview来进行回答。
+主要通过function call来进行交互，通过glm-4来进行回答。
 
 具体function有
 - embedding的搜索:有llamaindex版本和针对code优化版本（分为两步，第一步对代码func进行切割，第二步对每个func进行解释，然后对解释的内容进行embedding）。根据用户输入消息来匹配向量数据库中最相关的topk

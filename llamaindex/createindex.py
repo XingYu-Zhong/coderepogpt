@@ -3,17 +3,21 @@
 import os
 from dotenv import load_dotenv
 from llama_index.core import VectorStoreIndex,Document,StorageContext,load_index_from_storage
+from llama_index.embeddings.openai import OpenAIEmbedding
 import openai
 from function.utils import read_file
 from treesitter.pythonextract import PyExtract
 from llama_index.core.schema import BaseNode
-
+from llama_index.core import Settings
 FILE_DIR_BASE = ".llamaindex"
 class IndexStore:
     def __init__(self,file_dir):
         self.file_dir = file_dir
-        load_dotenv()
-        openai.api_key = os.getenv("openai_api_key")
+        Settings.embed_model = OpenAIEmbedding(
+            model_name="embedding-2",
+            api_key=os.getenv("glm_api_key"),
+            api_base="https://open.bigmodel.cn/api/paas/v4/",
+        )
         self.file_dir_index = os.path.join(FILE_DIR_BASE, file_dir)
         # 检查路径是否存在
         if os.path.exists(self.file_dir_index):
