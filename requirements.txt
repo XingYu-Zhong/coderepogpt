@@ -1,4 +1,4 @@
-openai==0.28
+# openai==0.28
 colorama==0.4.6
 colorlog==6.7.0
 python-dotenv
@@ -11,9 +11,9 @@ openai
 transformers
 scipy
 
-
+langchain_community
 llama_index
 gitpython
-chainlit
+# chainlit
 fastapi
 uvicorn
