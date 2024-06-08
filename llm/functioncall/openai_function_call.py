@@ -55,7 +55,7 @@ class OpenaiClient:
 - 始终调用函数。不要直接回答问题
 - user:后面的内容才是用户的输入，前面的background是一些背景介绍
 """ 
-            print(prompt)
+        
             self.messages.append({"role": "system", "content": prompt})
             chat_response = self.chat_completion_request(self.messages, self.tools, 'auto')
             
