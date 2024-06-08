@@ -1,5 +1,6 @@
 
 
+from logger.logging_config import logger
 from function.call_relation_search import CallRelationSearch
 from function.embedding_search import EmbeddingSearch
 from function.utils import read_file
@@ -37,6 +38,7 @@ class ProjectAnalyzer:
         }
     )
     def finish(self,paths):
+        logger.info(f"Finish called with paths: {paths}")
         return paths
 
     @functioncall(

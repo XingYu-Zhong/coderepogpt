@@ -10,7 +10,6 @@ langchain
 openai
 transformers
 scipy
-
 langchain_community
 llama_index
 gitpython

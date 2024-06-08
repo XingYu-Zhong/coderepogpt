@@ -8,11 +8,8 @@ import llm.functioncall.functionlist as fl
 from llm.functioncall.decorator import *
 from logger.logging_config import logger
 class OpenaiClient:
-    def __init__(self,project_path,proxy=None):
+    def __init__(self,project_path):
         load_dotenv()
-        if proxy:
-            os.environ["HTTP_PROXY"] = f'http://127.0.0.1:{proxy}'
-            os.environ["HTTPS_PROXY"] = f'http://127.0.0.1:{proxy}'
         glm_api_key = os.getenv("glm_api_key")
         self.tools_model = "glm-4"
         self.client = OpenAI(api_key = glm_api_key,base_url="https://open.bigmodel.cn/api/paas/v4/")
@@ -29,7 +26,7 @@ class OpenaiClient:
                 tools=tools,
                 tool_choice=tool_choice,
             )
-            logger.info(f"messages:{messages}\nChatCompletion response: {response.choices[0].message}")
+            # logger.info(f"messages:{messages}\nChatCompletion response: {response.choices[0].message}")
             return response
         except Exception as e:
             print("Unable to generate ChatCompletion response")
@@ -56,10 +53,13 @@ class OpenaiClient:
             chat_response = self.chat_completion_request(self.messages, self.tools, 'auto')
             
             assistant_message = chat_response.choices[0].message
-            print(assistant_message)
+            # print(assistant_message)
             self.messages.pop()
             self.messages.append(assistant_message)
             tool_calls = assistant_message.tool_calls
+            logger.info(f"tool_calls: {tool_calls}")
+            if tool_calls is None:
+                return self.messages[-10:]
             for tool_call in tool_calls:
                 function_name = tool_call.function.name
                 function_args = json.loads(tool_call.function.arguments)
@@ -70,14 +70,6 @@ class OpenaiClient:
                 logger.info(f"Calling function self.pa.{function_name}({function_args_str})")
                 function_call_response = eval(f"self.pa.{function_name}({function_args_str})")#TODO 展示
                 if function_name == "finish":
-                    # if len(function_call_response) == 0:
-                    #     function_call_response = "The current question does not require a call to an external function, so please think about it and answer it directly."
-                    # else:
-                    #     response = []
-                    #     for i in function_call_response:
-                    #         print(self.messages[i])
-                    #         response.append(self.messages[i])
-                    #     function_call_response = response
                     self.messages.append(
                     {
                         "tool_call_id": tool_call.id,

@@ -49,11 +49,13 @@ def clone_repo_with_token(repo_url, clone_to):
 def run(url,message):
     repo_path = clone_repo_with_token(url,'gitrepo')
     
-    load_dotenv()
-    proxy = os.getenv('proxy')
-    client = OpenaiClient(repo_path) if proxy is None else OpenaiClient(repo_path,proxy)
+
+    client = OpenaiClient(repo_path) 
     messages = f"user:{message}"
-    response = client.tools_chat_completion_request(messages)
+    try:
+        response = client.tools_chat_completion_request(messages)
+    except Exception as e:
+        print(f"An error occurred: {e}")
     # print(response)
     return response
 
