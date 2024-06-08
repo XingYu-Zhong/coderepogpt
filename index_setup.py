@@ -5,7 +5,7 @@ import shutil
 import os
 
 
-support_language = ["python"]
+support_language = ["python","cpp","javascript","java"]
 
 gitrepo = [f"git clone https://github.com/tree-sitter/tree-sitter-{i}.git" for i in support_language]
 # 尝试执行 git 命令，如果失败则尝试使用另一种方式

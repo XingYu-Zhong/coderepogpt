@@ -1,5 +1,6 @@
 
 
+import os
 from logger.logging_config import logger
 from function.call_relation_search import CallRelationSearch
 from function.embedding_search import EmbeddingSearch
@@ -17,13 +18,14 @@ class ProjectAnalyzer:
         description="Can read any file.",
         param_descriptions={
             "file_path": {
-                "description": "Path to the file to be read.",
+                "description": "Path to the file to be read.This is a file path including the filename. For example: 'xx/xxx.py'.",
                 "type": "string"
             }
         }
     )
     def read_any_file(self,file_path):
-        return read_file(file_path)
+        full_path = os.path.join(self.project_path, file_path)
+        return read_file(full_path)
 
     @functioncall(
         description="Call this to answer the user. Call this only when you have enough information to answer the user's query.",
