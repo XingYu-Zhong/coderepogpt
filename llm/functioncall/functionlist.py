@@ -14,6 +14,7 @@ class ProjectAnalyzer:
         self.project_path = project_path
         self.crs = CallRelationSearch(project_path)
         self.es = EmbeddingSearch(project_path)
+        self.cache = {}
     @functioncall(
         description="Can read any file.",
         param_descriptions={
@@ -54,15 +55,15 @@ class ProjectAnalyzer:
     @functioncall(
         description="Get the block of code in the codebase that is most similar to the query, including file path, function name, and function body.",
         param_descriptions={
-            "project_path": {
-                "description": "Path to the project.",
-                "type": "string"
-            },
             "query": {
                 "description": "Problems requiring queries to the code base.",
                 "type": "string"
             }
         }
     )
-    def coderepo_search(self,query):
-        return self.es.search_embedding(query=query)
+    def coderepo_search(self, query):
+        if query in self.cache:
+            return self.cache[query]
+        result = self.es.search_embedding(query=query)
+        self.cache[query] = result
+        return result

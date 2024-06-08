@@ -33,9 +33,12 @@ class OpenaiClient:
             print(f"Exception: {e}")
             return e
         
-    def tools_chat_completion_request(self,messages_history):
+    def tools_chat_completion_request(self, messages_history):
         self.messages.append({"role": "user", "content": messages_history})
-        while True:
+        max_iterations = 10
+        iteration_count = 0
+
+        while iteration_count < max_iterations:
             prompt = """
             你的任务就是选择最佳操作。调用函数查找有助于回答用户问题的信息。在有足够信息回答问题时，调用 functions.finish。请始终遵守以下规则：
             - 始终调用函数，不要直接回答问题，即使问题不是用英语提出的
@@ -53,7 +56,6 @@ class OpenaiClient:
             chat_response = self.chat_completion_request(self.messages, self.tools, 'auto')
             
             assistant_message = chat_response.choices[0].message
-            # print(assistant_message)
             self.messages.pop()
             self.messages.append(assistant_message)
             tool_calls = assistant_message.tool_calls
@@ -68,7 +70,7 @@ class OpenaiClient:
                     for k, v in function_args.items()
                 ])
                 logger.info(f"Calling function self.pa.{function_name}({function_args_str})")
-                function_call_response = eval(f"self.pa.{function_name}({function_args_str})")#TODO 展示
+                function_call_response = eval(f"self.pa.{function_name}({function_args_str})")
                 if function_name == "finish":
                     self.messages.append(
                     {
@@ -89,3 +91,5 @@ class OpenaiClient:
                         "content": str(function_call_response),
                     }
                 )
+            iteration_count += 1
+        return self.messages[-10:]
