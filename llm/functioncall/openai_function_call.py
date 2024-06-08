@@ -80,9 +80,10 @@ class OpenaiClient:
                         "content": str(function_call_response),
                     }
                     )
-                    chat_response = self.chat_completion_request(self.messages)
-                    assistant_message = chat_response.choices[0].message
-                    return assistant_message.content
+                    # chat_response = self.chat_completion_request(self.messages)
+                    # assistant_message = chat_response.choices[0].message
+                    # return assistant_message.content
+                    return self.messages[-10:]
                 self.messages.append(
                     {
                         "tool_call_id": tool_call.id,
