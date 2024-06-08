@@ -2,6 +2,26 @@
 
 import json
 
+import os
+
+def get_directory_structure(directory_path):
+    """
+    获取指定目录下的文件结构并返回为字符串格式。
+
+    :param directory_path: str, 目录路径
+    :return: str, 文件结构
+    """
+    structure = []
+
+    for root, dirs, files in os.walk(directory_path):
+        level = root.replace(directory_path, '').count(os.sep)
+        indent = ' ' * 4 * level
+        structure.append(f"{indent}{os.path.basename(root)}/")
+        sub_indent = ' ' * 4 * (level + 1)
+        for file in files:
+            structure.append(f"{sub_indent}{file}")
+
+    return "\n".join(structure)
 
 def filter_data(obj):
     LANGUAGE_TAG = {

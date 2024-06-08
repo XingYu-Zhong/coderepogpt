@@ -7,6 +7,7 @@ from tenacity import retry, wait_random_exponential, stop_after_attempt
 import llm.functioncall.functionlist as fl
 from llm.functioncall.decorator import *
 from logger.logging_config import logger
+from utils.tools import get_directory_structure
 class OpenaiClient:
     def __init__(self,project_path):
         load_dotenv()
@@ -16,6 +17,7 @@ class OpenaiClient:
         self.tools = registered_functions
         self.messages = []#TODO save
         self.pa = fl.ProjectAnalyzer(project_path)
+        self.project_structure = get_directory_structure(project_path)
 
     @retry(wait=wait_random_exponential(multiplier=1, max=40), stop=stop_after_attempt(3))
     def chat_completion_request(self,messages, tools=None, tool_choice=None,model = None):
@@ -39,19 +41,21 @@ class OpenaiClient:
         iteration_count = 0
 
         while iteration_count < max_iterations:
-            prompt = """
-            你的任务就是选择最佳操作。调用函数查找有助于回答用户问题的信息。在有足够信息回答问题时，调用 functions.finish。请始终遵守以下规则：
-            - 始终调用函数，不要直接回答问题，即使问题不是用英语提出的
-            - 不要调用以前使用过的具有相同参数的函数
-            - 切勿假设索引库的结构（如上所述）或文件或文件夹的存在
-            - 调用 functions.finish 时，请使用您确信有助于回答用户查询的路径，包括包含完整回答所需信息（包括定义和引用）的路径。
-            - 如果用户引用或询问的信息在历史记录中，则调用 functions.finish
-            - 如果在尝试收集信息后仍不确定如何回答询问，则调用 functions.finish
-            - 如果查询是问候语，或者既不是问题也不是指令，则调用 functions.finish
-            - 如果函数的输出是空的，请尝试使用不同的参数再次调用函数，或者尝试调用不同的函数
-            - 始终调用函数。不要直接回答问题
-            - user:后面的内容才是用户的输入，前面的background是一些背景介绍
-            """ 
+            prompt = f"""
+项目目录结构是:\n{self.project_structure}
+你的任务就是选择最佳操作。调用函数查找有助于回答用户问题的信息。在有足够信息回答问题时，调用 functions.finish。请始终遵守以下规则：
+- 始终调用函数，不要直接回答问题，即使问题不是用英语提出的
+- 不要调用以前使用过的具有相同参数的函数
+- 切勿假设索引库的结构（如上所述）或文件或文件夹的存在
+- 调用 functions.finish 时，请使用您确信有助于回答用户查询的路径，包括包含完整回答所需信息（包括定义和引用）的路径。
+- 如果用户引用或询问的信息在历史记录中，则调用 functions.finish
+- 如果在尝试收集信息后仍不确定如何回答询问，则调用 functions.finish
+- 如果查询是问候语，或者既不是问题也不是指令，则调用 functions.finish
+- 如果函数的输出是空的，请尝试使用不同的参数再次调用函数，或者尝试调用不同的函数
+- 始终调用函数。不要直接回答问题
+- user:后面的内容才是用户的输入，前面的background是一些背景介绍
+""" 
+            print(prompt)
             self.messages.append({"role": "system", "content": prompt})
             chat_response = self.chat_completion_request(self.messages, self.tools, 'auto')
             
