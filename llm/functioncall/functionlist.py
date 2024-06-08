@@ -19,7 +19,7 @@ class ProjectAnalyzer:
         description="Can read any file.",
         param_descriptions={
             "file_path": {
-                "description": "Path to the file to be read.This is a file path including the filename. For example: 'xx/xxx.py'.",
+                "description": "The path to the file to read. This is the path to a file that contains the filename. For example, “xx/xxx.py”. No project directory is needed, the function will splice this path with the project directory.",
                 "type": "string"
             }
         }
