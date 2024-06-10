@@ -3,7 +3,7 @@ colorama==0.4.6
 colorlog==6.7.0
 python-dotenv
 tree_sitter
-
+chardet
 networkx==2.5
 matplotlib
 langchain
