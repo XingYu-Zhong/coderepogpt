@@ -2,7 +2,17 @@
 from typing import Optional
 
 
-def read_file(file_path: str, encoding: Optional[str] = 'utf-8', begin_byte: Optional[int] = None, end_byte: Optional[int] = None) -> Optional[str]:
+import chardet
+
+def detect_encoding(file_path: str) -> str:
+    with open(file_path, 'rb') as file:
+        raw_data = file.read(10000)  # Read a portion of the file
+    result = chardet.detect(raw_data)
+    return result['encoding']
+
+def read_file(file_path: str, encoding: Optional[str] = None, begin_byte: Optional[int] = None, end_byte: Optional[int] = None) -> Optional[str]:
+    if encoding is None:
+        encoding = detect_encoding(file_path)
     try:
         with open(file_path, 'r', encoding=encoding) as file:
             if begin_byte is not None or end_byte is not None:
