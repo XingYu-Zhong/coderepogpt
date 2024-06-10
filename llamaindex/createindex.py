@@ -54,10 +54,11 @@ class IndexStore:
                 elif filename.endswith('.md'):
                     extract = MdExtract()
                 else:
-                    if filter_data(normalized_path):
-                        extract = MdExtract()
-                    else:
-                        continue
+                    continue
+                    # if filter_data(normalized_path):
+                    #     extract = MdExtract()
+                    # else:
+                    #     continue
                 result_list = extract.splitter_function(normalized_path)
                 for result in result_list:
                     document = Document(

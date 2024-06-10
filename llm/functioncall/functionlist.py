@@ -12,7 +12,7 @@ from llm.functioncall.decorator import functioncall
 class ProjectAnalyzer:
     def __init__(self, project_path):
         self.project_path = project_path
-        self.crs = CallRelationSearch(project_path)
+        # self.crs = CallRelationSearch(project_path)
         self.es = EmbeddingSearch(project_path)
         self.cache = {}
     @functioncall(
@@ -44,13 +44,13 @@ class ProjectAnalyzer:
         logger.info(f"Finish called with paths: {paths}")
         return paths
 
-    @functioncall(
-        description="Get the graph structure of function calls in the project.",
-        param_descriptions={
-        }
-    )
-    def call_relation(self):
-        return self.crs.call_relation_search()
+    # @functioncall(
+    #     description="Get the graph structure of function calls in the project.",
+    #     param_descriptions={
+    #     }
+    # )
+    # def call_relation(self):
+    #     return self.crs.call_relation_search()
 
     @functioncall(
         description="Get the block of code in the codebase that is most similar to the query, including file path, function name, and function body.",
