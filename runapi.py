@@ -49,7 +49,7 @@ def clone_repo_with_token(repo_url, clone_to):
 def run(url,message):
     repo_path = clone_repo_with_token(url,'gitrepo')
     file_count = sum([len(files) for _, _, files in os.walk(repo_path)])
-    if file_count > 100:
+    if file_count > 1000:
         return "项目太大了，请换小项目提问"
 
     client = OpenaiClient(repo_path) 
