@@ -14,7 +14,7 @@ from treesitter.mdextract import MdExtract
 from treesitter.pythonextract import PyExtract
 from llama_index.core.schema import BaseNode
 from llama_index.core import Settings
-
+from logger.logging_config import logger
 from utils.tools import filter_data
 FILE_DIR_BASE = ".llamaindex"
 class IndexStore:
@@ -61,11 +61,18 @@ class IndexStore:
                     #     continue
                 result_list = extract.splitter_function(normalized_path)
                 for result in result_list:
-                    document = Document(
-                        text=read_file(file_path=result['source_path'], begin_byte=result['begin_byte'], end_byte=result['end_byte']),
-                        metadata={"filepath": result['source_path'], "name": result['name']},
-                    )
-                    document_list.append(document)
+                    try:
+                        text = read_file(file_path=result['source_path'], begin_byte=result['begin_byte'], end_byte=result['end_byte'])
+                        if text is None:
+                            continue
+                        document = Document(
+                            text=text,
+                            metadata={"filepath": result['source_path'], "name": result['name']},
+                        )
+                        document_list.append(document)
+                    except Exception as e:
+                        print(f"Error reading file {result['source_path']}: {e}")
+                        continue
                     
 
         return document_list
