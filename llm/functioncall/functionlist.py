@@ -26,7 +26,12 @@ class ProjectAnalyzer:
     )
     def read_any_file(self,file_path):
         full_path = os.path.join(self.project_path, file_path)
-        return read_file(full_path)
+        try:
+            text = read_file(full_path)
+        except Exception as e:
+            logger.error(f"Error reading file at {full_path}: {e}")
+            return "文件路径错误只需要返回目录下的文件路径即可"
+        return text
 
     @functioncall(
         description="Call this to answer the user. Call this only when you have enough information to answer the user's query.",

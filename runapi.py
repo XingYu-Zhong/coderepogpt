@@ -51,7 +51,24 @@ def run(url,message):
     file_count = sum([len(files) for _, _, files in os.walk(repo_path)])
     if file_count > 1000:
         return "项目太大了，请换小项目提问"
-
+    count_files = 0
+    for root, dirs, files in os.walk(repo_path):
+        for filename in files:
+            if filename.endswith('.py'):  # 只处理 .py 文件
+                count_files+=1
+            elif filename.endswith('.js'):
+                count_files+=1
+            elif filename.endswith('.cpp'):
+                count_files+=1
+            elif filename.endswith('.java'):
+                count_files+=1
+            elif filename.endswith('.md'):
+                count_files+=1
+            else:
+                continue
+    logger.info(f"count_files: {count_files}")
+    if count_files > 60:
+        return "项目有些大，请联系作者让小geex需要学习一下才能回答你的问题"
     client = OpenaiClient(repo_path) 
     messages = f"user:{message}"
     try:
