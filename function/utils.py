@@ -14,7 +14,7 @@ def read_file(file_path: str, encoding: Optional[str] = None, begin_byte: Option
     if encoding is None:
         encoding = detect_encoding(file_path)
     try:
-        with open(file_path, 'r', encoding=encoding) as file:
+        with open(file_path, 'r', encoding=encoding,errors='ignore') as file:
             if begin_byte is not None or end_byte is not None:
                 file.seek(begin_byte or 0)
                 return file.read((end_byte - begin_byte) if end_byte is not None else -1)
